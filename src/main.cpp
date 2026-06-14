@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 #include "common/scene.h"
 #include "m1_primitives/primitives.h"
 #include "m2_fills_transforms/world2d.h"
@@ -80,6 +81,13 @@ static void display() {
 
     glClearColor(g_scene.skyTop.r, g_scene.skyTop.g, g_scene.skyTop.b, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Hand-rasterised fills plot one point per world unit; when the window is
+    // larger than the 1280x720 world, scale the point size so the dots tile
+    // with no gaps (otherwise a grid shows through the fills).
+    float zoom = fmaxf((float)g_winW / WIN_W, (float)g_winH / WIN_H);
+    int ps = (int)ceilf(zoom); if (ps < 1) ps = 1; if (ps > 8) ps = 8;
+    glPointSize((float)ps);
 
     if (g_scene.t < CITY_T) {
         // -------- 2D world (segments 0-3) --------

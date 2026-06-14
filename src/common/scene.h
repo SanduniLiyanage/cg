@@ -40,6 +40,9 @@ struct SceneState {
     bool  labelsOn = false;  // 'L' toggle — concept captions off by default
     bool  paused = false;
 
+    int   winW = WIN_W;      // actual framebuffer size (updated on reshape)
+    int   winH = WIN_H;      // so the viewport fills the window when maximised
+
     // Sky gradient (M2 flood-fill / gradient quad uses these).
     Color skyTop, skyBottom;
     float starAlpha = 1.0f;  // star visibility (night/pre-dawn)

@@ -182,7 +182,10 @@ static void drawLake(const SceneState& s){
     // Reflection of the balloon, mirrored across the waterline, clipped to the
     // lake strip with a scissor box (window->viewport pixels).
     glEnable(GL_SCISSOR_TEST);
-    glScissor(0,(int)WATER_LO,WIN_W,(int)(WATER_HI-WATER_LO));
+    // scissor is in real framebuffer pixels — scale the lake band to the window
+    int scY = (int)(WATER_LO / WIN_H * s.winH);
+    int scH = (int)((WATER_HI - WATER_LO) / WIN_H * s.winH);
+    glScissor(0, scY, s.winW, scH);
     glPushMatrix();
     // reflect about y = WATER_HI, with a gentle horizontal shimmer
     glTranslatef(2.0f*std::sin(s.t*2.0f),0,0);

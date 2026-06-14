@@ -14,6 +14,13 @@
 using namespace hw;
 
 static int g_lastMs = 0;
+static int g_winW = WIN_W, g_winH = WIN_H;   // actual window size
+
+static void reshape(int w, int h) {
+    if (w < 1) w = 1; if (h < 1) h = 1;
+    g_winW = w; g_winH = h;
+    glViewport(0, 0, w, h);
+}
 
 static void advanceClock() {
     int now = glutGet(GLUT_ELAPSED_TIME);
@@ -27,7 +34,7 @@ static void advanceClock() {
 
 // 2D projection: gluOrtho2D as a moving WINDOW over the wide world (M3 mapping).
 static void set2DWindow() {
-    glViewport(0, 0, WIN_W, WIN_H);          // the viewport
+    glViewport(0, 0, g_winW, g_winH);        // the viewport = full window
     glMatrixMode(GL_PROJECTION); glLoadIdentity();
     gluOrtho2D(g_scene.camX, g_scene.camX + WIN_W, 0, WIN_H); // the window
     glMatrixMode(GL_MODELVIEW); glLoadIdentity();
@@ -69,6 +76,7 @@ static void drawLabels() {
 static void display() {
     advanceClock();
     m5::updateTimeline(g_scene, g_scene.t);
+    g_scene.winW = g_winW; g_scene.winH = g_winH;
 
     glClearColor(g_scene.skyTop.r, g_scene.skyTop.g, g_scene.skyTop.b, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -140,6 +148,7 @@ int main(int argc, char** argv) {
     }
 
     glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(special);
     glutTimerFunc(16, timer, 0);

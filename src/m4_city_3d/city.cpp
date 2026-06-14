@@ -145,10 +145,11 @@ static void drawLanterns(const SceneState& s){
 }
 
 void drawCity(const SceneState& s){
+    glViewport(0,0,s.winW,s.winH);   // fill the window (no uncovered bar)
     drawNightSky(s);
 
     // --- Projection: morph parallel (ortho) -> perspective -----------------
-    float asp=(float)WIN_W/WIN_H;
+    float asp=(float)s.winW/s.winH;
     float P[16],O[16],M[16];
     perspM(P,50.0f,asp,1.0f,800.0f);
     float oh=54.0f; orthoM(O,-oh*asp,oh*asp,-oh*0.55f,oh*1.05f,1.0f,800.0f);

@@ -132,8 +132,12 @@ int main(int argc, char** argv) {
     m4::initCity();
     g_lastMs = glutGet(GLUT_ELAPSED_TIME);
 
-    // Optional: start at a given time (seconds) for verification screenshots.
-    if (argc > 1) { g_scene.t = (float)atof(argv[1]); if (argc > 2) g_scene.paused = true; }
+    // Optional CLI: <startSeconds> [pause] [labels] for verification screenshots.
+    for (int i = 1; i < argc; ++i) {
+        if (!strcmp(argv[i], "pause"))  g_scene.paused = true;
+        else if (!strcmp(argv[i], "labels")) g_scene.labelsOn = true;
+        else g_scene.t = (float)atof(argv[i]);
+    }
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);

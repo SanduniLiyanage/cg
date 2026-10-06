@@ -41,7 +41,7 @@ pacman -S --needed \
 ### 2. Configure & build
 
 ```bash
-cd /c/Users/ASUS/Desktop/cg      # this repo
+cd cg      # this repo
 cmake -S . -B build -G Ninja
 cmake --build build
 ```
